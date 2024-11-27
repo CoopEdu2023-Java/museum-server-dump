@@ -1,8 +1,8 @@
 package cn.msa.msa_museum_server.controller;
 
 import cn.msa.msa_museum_server.dto.ResponseDto;
-//import cn.msa.msa_museum_server.exception.BusinessException;
-//import cn.msa.msa_museum_server.exception.ExceptionEnum;
+import cn.msa.msa_museum_server.exception.BusinessException;
+import cn.msa.msa_museum_server.exception.ExceptionEnum;
 import cn.msa.msa_museum_server.entity.FileEntity;
 import cn.msa.msa_museum_server.service.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,12 +25,22 @@ public class FileController {
     }
 
     @GetMapping("/files")
-    public ResponseDto<Page<FileEntity>> getFileList(@RequestParam(defaultValue = "0") int page,
-                                                  @RequestParam(defaultValue = "10") int size) {
-//        if(page < 0 || size <= 0) {
-//            throw new BusinessException(ExceptionEnum.INVALID_ENTRY);
-//        }
-        Pageable pageable = PageRequest.of(page, size);
-        return new ResponseDto<>(0, "",fileService.getFileList(pageable));
+    public ResponseDto<Page<FileEntity>> getFileList(
+            @RequestParam(defaultValue = "0") String page,
+            @RequestParam(defaultValue = "10") String size) {
+
+        try {
+            int pageNumber = Integer.parseInt(page);
+            int pageSize = Integer.parseInt(size);
+
+            if (pageNumber < 0 || pageSize <= 0) {
+                throw new BusinessException(ExceptionEnum.INVALID_ENTRY);
+            }
+
+            Pageable pageable = PageRequest.of(pageNumber, pageSize);
+            return new ResponseDto<>(0, "", fileService.getFileList(pageable));
+        } catch (NumberFormatException e) {
+            throw new BusinessException(ExceptionEnum.INVALID_ENTRY_TYPE);
+        }
     }
 }
