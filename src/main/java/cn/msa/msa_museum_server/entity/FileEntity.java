@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Entity
 @Data
-class FileEntity {
+public class FileEntity {
     @Id
     @GeneratedValue
     private String id;
