@@ -90,6 +90,7 @@ public class FileServiceImpl implements FileService {
             case "video/mp4":
                 return requestType == FileContentRequestTypeDto.RANGE;
             default:
+                log.warn("Unsupported content type: {}", fileEntity.getContentType());
                 return false;
         }
     }
