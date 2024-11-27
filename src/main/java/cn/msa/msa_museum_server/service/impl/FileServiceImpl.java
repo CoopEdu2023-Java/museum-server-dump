@@ -3,13 +3,13 @@ package cn.msa.msa_museum_server.service.impl;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
+
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 
 import cn.msa.msa_museum_server.config.FileProperties;
-import cn.msa.msa_museum_server.dto.FileMetadataDto;
 import cn.msa.msa_museum_server.dto.FileContentRequestTypeDto;
+import cn.msa.msa_museum_server.dto.FileMetadataDto;
 import cn.msa.msa_museum_server.entity.FileEntity;
 import cn.msa.msa_museum_server.exception.BusinessException;
 import cn.msa.msa_museum_server.exception.ExceptionEnum;
@@ -20,13 +20,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class FileServiceImpl implements FileService {
 
-    // The location where files are stored
-    private final Path storageLocation;
+    private final FileProperties fileProperties;
 
     private final FileRepository fileRepository;
 
-    public FileServiceImpl(FileProperties properties, FileRepository fileRepository) {
-        this.storageLocation = Paths.get(properties.getStorageLocation());
+    public FileServiceImpl(FileProperties fileProperties, FileRepository fileRepository) {
+        this.fileProperties = fileProperties;
         this.fileRepository = fileRepository;
     }
 
@@ -83,7 +82,8 @@ public class FileServiceImpl implements FileService {
             case "image/webp":
             case "application/pdf":
             case "text/plain":
-                return fileEntity.getSize() <= 10485760 && requestType == FileContentRequestTypeDto.FULL;
+                return fileEntity.getSize() <= fileProperties.getMaxDownloadSize()
+                        && requestType == FileContentRequestTypeDto.FULL;
             case "audio/mpeg":
             case "audio/ogg":
             case "audio/wav":
@@ -95,12 +95,13 @@ public class FileServiceImpl implements FileService {
     }
 
     private Path getFilePath(FileEntity fileEntity) {
-        return storageLocation.resolve(fileEntity.getFilename());
+        return Path.of(fileProperties.getStorageLocation()).resolve(fileEntity.getFilename());
     }
 
     private String formatFileSize(long size) {
-        if (size < 1024)
+        if (size < 1024) {
             return size + " B";
+        }
         int exp = (int) (Math.log(size) / Math.log(1024));
         String prefix = "KMGTPE".charAt(exp - 1) + "";
         return String.format("%.1f %sB", size / Math.pow(1024, exp), prefix);

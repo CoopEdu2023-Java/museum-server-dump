@@ -12,4 +12,5 @@ import lombok.Setter;
 @Setter
 public class FileProperties {
     private String storageLocation;
+    private int maxDownloadSize = 1024 * 1024 * 10;
 }
