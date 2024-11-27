@@ -1,9 +1,12 @@
 package cn.msa.msa_museum_server.controller;
 
-import cn.msa.msa_museum_server.dto.FileMetadataDto;
-import cn.msa.msa_museum_server.dto.FileContentRequestTypeDto;
-import cn.msa.msa_museum_server.exception.ExceptionEnum;
-import cn.msa.msa_museum_server.service.FileService;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +19,10 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import cn.msa.msa_museum_server.dto.FileContentRequestTypeDto;
+import cn.msa.msa_museum_server.dto.FileMetadataDto;
+import cn.msa.msa_museum_server.exception.ExceptionEnum;
+import cn.msa.msa_museum_server.service.FileService;
 
 @WebMvcTest(FileController.class)
 @WithMockUser

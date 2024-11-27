@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import cn.msa.msa_museum_server.dto.FileMetadataDto;
 import cn.msa.msa_museum_server.dto.FileContentRequestTypeDto;
+import cn.msa.msa_museum_server.dto.FileMetadataDto;
 import cn.msa.msa_museum_server.dto.ResponseDto;
 import cn.msa.msa_museum_server.exception.BusinessException;
 import cn.msa.msa_museum_server.exception.ExceptionEnum;
@@ -40,14 +40,16 @@ public class FileController {
     public ResponseEntity<Resource> getFileContent(
             @RequestHeader(value = "Range", required = false) String range,
             @PathVariable String id) {
-        if (id == null)
+        if (id == null) {
             throw new BusinessException(ExceptionEnum.MISSING_PARAMETERS);
+        }
 
         // Check if the request type is supported for the file type
         FileContentRequestTypeDto requestType = range == null ? FileContentRequestTypeDto.FULL
                 : FileContentRequestTypeDto.RANGE;
-        if (!fileService.supportFileContentRequestType(id, requestType))
+        if (!fileService.supportFileContentRequestType(id, requestType)) {
             throw new BusinessException(ExceptionEnum.INVALID_FILE_REQUEST_TYPE);
+        }
 
         FileMetadataDto fileMetadataDto = fileService.getFileMetadata(id);
         String filename = fileMetadataDto.getName();
