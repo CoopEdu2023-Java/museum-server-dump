@@ -12,14 +12,14 @@ public class ErrorHandler {
     @ExceptionHandler(value = Exception.class)
     @ResponseBody
     public ResponseDto<String> exceptionHandler(Exception e) {
-        System.out.println("The error exception: " + e);
-        return new ResponseDto<String>(1949, "Unknwon Error: " + e.getMessage(), null);
+        System.out.println("Exception: " + e);
+        return new ResponseDto<String>(1000, "Unknwon Error: " + e.getMessage(), null);
     }
 
     @ExceptionHandler(value = BusinessException.class)
     @ResponseBody
     public ResponseDto<String> exceptionHandler(BusinessException e) {
-        System.out.println("The error exception: " + e);
+        System.out.println("Exception: " + e);
         return new ResponseDto<String>(e.getCode(), "Unknwon Error: " + e.getMessage(), null);
     }
 }

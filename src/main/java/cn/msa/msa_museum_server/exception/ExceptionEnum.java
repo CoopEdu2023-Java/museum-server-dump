@@ -7,7 +7,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum ExceptionEnum {
 
-    MISSING_PARAMETERS(2000, "Missing the parameters"),
+    MISSING_PARAMETERS(1001, "Missing the parameters"),
     USER_EXISTS(2001, "User already exists"),
     USER_DOES_NOT_EXIST(2002, "User does not exist"),
     WRONG_PASSWORD(2003, "Wrong password");
