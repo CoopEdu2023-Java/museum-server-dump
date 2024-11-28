@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -23,9 +24,11 @@ import cn.msa.msa_museum_server.dto.FileContentRequestTypeDto;
 import cn.msa.msa_museum_server.dto.FileMetadataDto;
 import cn.msa.msa_museum_server.exception.ExceptionEnum;
 import cn.msa.msa_museum_server.service.FileService;
+import cn.msa.msa_museum_server.service.JwtService;
 
 @WebMvcTest(FileController.class)
 @WithMockUser
+@Import(JwtService.class)
 public class FileControllerTest {
 
     @Autowired
