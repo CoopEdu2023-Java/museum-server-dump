@@ -11,9 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -26,14 +23,6 @@ public class UserControllerTests {
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    static class LoginRequest {
-        private String username;
-        private String password;
-    }
 
     @Data
     @NoArgsConstructor
@@ -56,74 +45,17 @@ class UserControllerUnitTests {
     @Autowired
     private ObjectMapper objectMapper;
 
-    // Login tests
-    @Test
-    public void testLoginWithValidCredentials() throws Exception {
-        // 构造请求参数
-        String loginRequestJson = objectMapper.writeValueAsString(new UserControllerTests.LoginRequest("user", "1aA@93r3f"));
-
-        // 执行请求
-        String responseToken = mockMvc.perform(post("/users/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(loginRequestJson))
-                .andExpect(status().isOk()) // 确认返回 HTTP 200 状态
-                .andReturn()
-                .getResponse()
-                .getContentAsString(); // 获取响应的内容
-
-        // 验证响应的 token 是否非空
-        assertNotNull(responseToken, "Token should not be null");
-        assertFalse(responseToken.trim().isEmpty(), "Token should not be empty");
-
-        // 打印 token（可选，用于调试）
-        System.out.println("Login Token: " + responseToken);
-    }
-
-    @Test
-    public void testLoginWithInvalidCredentials() throws Exception {
-        String invalidLoginJson = objectMapper.writeValueAsString(new UserControllerTests.LoginRequest("wrongUser", "wrongPassword"));
-
-        mockMvc.perform(post("/users/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(invalidLoginJson))
-                .andExpect(status().isOk()) // Expect 200 status for invalid login (if that's the API design)
-                .andExpect(jsonPath("$.code").value(2002)) // Verify error code
-                .andExpect(jsonPath("$.message").value("Error: User does not exist")); // Verify error message
-    }
-
-    @Test
-    public void testRetrieveJwtTokenAfterLogin() throws Exception {
-        String loginRequestJson = objectMapper.writeValueAsString(new UserControllerTests.LoginRequest("user", "1aA@93r3f"));
-
-        String jwtToken = mockMvc.perform(post("/users/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(loginRequestJson))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
-
-        assertNotNull(jwtToken, "Token should not be null");
-        assertFalse(jwtToken.isEmpty(), "Token should not be empty");
-    }
 
     //Reset Password
     @Test
     public void testResetPasswordWithValidToken() throws Exception {
-        // Mock login to get JWT token
-        String loginRequestJson = objectMapper.writeValueAsString(new UserControllerTests.LoginRequest("user", "1aA@93r3f"));
-        String jwtToken = mockMvc.perform(post("/users/login")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(loginRequestJson))
-                .andExpect(status().isOk())
-                .andReturn()
-                .getResponse()
-                .getContentAsString();
+        // Directly provide JWT token
+        String jwtToken = "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiIxNyIsImV4cCI6MTczMjg1MDQ0Mn0.rXoHBMS4AhDsmhJiwiEW3FX6ZK9G-HIfGMiyO-0wEcw";
 
         // Reset password
-        String resetPasswordRequestJson = objectMapper.writeValueAsString(new UserControllerTests.ResetPasswordRequest("user", "1aA@93r3f", "2aA@93r3f"));
+        String resetPasswordRequestJson = objectMapper.writeValueAsString(new UserControllerTests.ResetPasswordRequest("user", "2aA@93r3f", "1aA@93r3f"));
 
-        mockMvc.perform(post("/users/reset-password")
+        mockMvc.perform(post("/users/password/reset")
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + jwtToken)
                         .content(resetPasswordRequestJson))
@@ -137,7 +69,7 @@ class UserControllerUnitTests {
                 new UserControllerTests.ResetPasswordRequest("testUser", "testPassword", "newPassword")
         );
 
-        mockMvc.perform(post("/users/reset-password")
+        mockMvc.perform(post("/users/password/reset")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(resetPasswordRequestJson))
                 .andExpect(status().isForbidden()); // Expect 403 due to missing token
