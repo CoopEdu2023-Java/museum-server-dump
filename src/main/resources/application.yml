@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/msa_museum
-    username: testuser
-    password: password
+    url: jdbc:postgresql://49.51.202.173:5432/msa_museum
+    username: postgres
+    password: 20071028zhanG!
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
@@ -11,3 +11,12 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
+file:
+  storageLocation: C://upload
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    cn.msa.msa_museum_server: DEBUG  # 配置自定义包的日志级别为DEBUG
+    # 如果需要，设置具体的类
+    cn.msa.msa_museum_server.service.impl.FileUploadServiceImpl: TRACE  # 更详细的日志输出

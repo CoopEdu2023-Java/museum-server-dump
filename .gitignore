@@ -25,3 +25,4 @@ replay_pid*
 
 /target
 /.vscode
+src/main/java/cn/msa/msa_museum_server/exception/BusinessException.java
