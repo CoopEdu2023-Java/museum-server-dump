@@ -8,9 +8,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FileMetadataDto {
-    private String id;
     private String name;
     private String type;
-    private String size;
+    private long size;
     private String url;
 }

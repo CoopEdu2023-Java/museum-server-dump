@@ -37,38 +37,42 @@ public class FileControllerTest {
     @Mock
     private Resource resource;
 
-    private FileMetadataDto setupFileMetadata(String fileId) {
-        FileMetadataDto fileMetadataDto = new FileMetadataDto(fileId, "test.pdf", "application/pdf", "3.5 MB",
-                "/files/123/content");
-        when(fileService.getFileMetadata(fileId)).thenReturn(fileMetadataDto);
+    private static final String TEST_FILENAME = "test.pdf";
+    private static final String TEST_FILE_TYPE = "application/pdf";
+    private static final long TEST_FILE_SIZE = 3500L;
+    private static final String TEST_FILE_URL = "/files/test.pdf/content";
+    private static final String TEST_FILE_METADATA_URL = "/files/test.pdf/metadata";
+
+    private FileMetadataDto setupFileMetadata() {
+        FileMetadataDto fileMetadataDto = new FileMetadataDto(TEST_FILENAME, TEST_FILE_TYPE, TEST_FILE_SIZE,
+                TEST_FILE_URL);
+        when(fileService.getFileMetadata(TEST_FILENAME)).thenReturn(fileMetadataDto);
         return fileMetadataDto;
     }
 
     @Test
     public void testGetFileMetadata_Success() throws Exception {
-        String fileId = "123";
-        setupFileMetadata(fileId);
+        setupFileMetadata();
 
-        mockMvc.perform(get("/files/123/metadata"))
+        mockMvc.perform(get(TEST_FILE_METADATA_URL))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(0))
                 .andExpect(jsonPath("$.message").value("success"))
-                .andExpect(jsonPath("$.data.id").value("123"))
-                .andExpect(jsonPath("$.data.name").value("test.pdf"))
-                .andExpect(jsonPath("$.data.type").value("application/pdf"))
-                .andExpect(jsonPath("$.data.size").value("3.5 MB"))
-                .andExpect(jsonPath("$.data.url").value("/files/123/content"));
+                .andExpect(jsonPath("$.data.name").value(TEST_FILENAME))
+                .andExpect(jsonPath("$.data.type").value(TEST_FILE_TYPE))
+                .andExpect(jsonPath("$.data.size").value(TEST_FILE_SIZE))
+                .andExpect(jsonPath("$.data.url").value(TEST_FILE_URL));
     }
 
     @Test
     public void testGetFileContent_Success() throws Exception {
-        String fileId = "123";
-        setupFileMetadata(fileId);
-        when(fileService.getFileContent(fileId)).thenReturn(resource);
-        when(fileService.supportFileContentRequestType(fileId, FileContentRequestTypeDto.FULL)).thenReturn(true);
-        when(resource.getFilename()).thenReturn("test.pdf");
+        FileMetadataDto fileMetadataDto = setupFileMetadata();
+        when(fileService.getFileContent(fileMetadataDto.getName())).thenReturn(resource);
+        when(fileService.supportFileContentRequestType(fileMetadataDto.getName(), FileContentRequestTypeDto.FULL))
+                .thenReturn(true);
+        when(resource.getFilename()).thenReturn(TEST_FILENAME);
 
-        MockHttpServletResponse response = mockMvc.perform(get("/files/123/content"))
+        MockHttpServletResponse response = mockMvc.perform(get(TEST_FILE_URL))
                 .andExpect(status().isOk())
                 .andReturn()
                 .getResponse();
@@ -80,45 +84,45 @@ public class FileControllerTest {
 
     @Test
     public void testGetFileContentRanged_Success() throws Exception {
-        String fileId = "123";
-        setupFileMetadata(fileId);
+        setupFileMetadata();
         Resource resource = new ByteArrayResource("test content".getBytes());
-        when(fileService.getFileContent(fileId)).thenReturn(resource);
-        when(fileService.supportFileContentRequestType(fileId, FileContentRequestTypeDto.RANGE)).thenReturn(true);
+        when(fileService.getFileContent(TEST_FILENAME)).thenReturn(resource);
+        when(fileService.supportFileContentRequestType(TEST_FILENAME, FileContentRequestTypeDto.RANGE))
+                .thenReturn(true);
 
-        MockHttpServletResponse response = mockMvc.perform(get("/files/123/content")
+        MockHttpServletResponse response = mockMvc.perform(get(TEST_FILE_URL)
                 .header(HttpHeaders.RANGE, "bytes=0-1023"))
                 .andExpect(status().isPartialContent())
                 .andReturn()
                 .getResponse();
 
         assertTrue(response.getHeaderNames().contains(HttpHeaders.CONTENT_DISPOSITION));
-        assertEquals("inline; filename=\"test.pdf\"", response.getHeader(HttpHeaders.CONTENT_DISPOSITION));
-        assertEquals("application/pdf", response.getContentType());
+        assertEquals("inline; filename=\"" + TEST_FILENAME + "\"", response.getHeader(HttpHeaders.CONTENT_DISPOSITION));
+        assertEquals(TEST_FILE_TYPE, response.getContentType());
     }
 
     @Test
     public void testGetFileContentRanged_InvalidRange() throws Exception {
-        String fileId = "123";
-        setupFileMetadata(fileId);
+        setupFileMetadata();
         Resource resource = new ByteArrayResource("test content".getBytes());
-        when(fileService.getFileContent(fileId)).thenReturn(resource);
-        when(fileService.supportFileContentRequestType(fileId, FileContentRequestTypeDto.RANGE)).thenReturn(true);
+        when(fileService.getFileContent(TEST_FILENAME)).thenReturn(resource);
+        when(fileService.supportFileContentRequestType(TEST_FILENAME, FileContentRequestTypeDto.RANGE))
+                .thenReturn(true);
 
-        mockMvc.perform(get("/files/123/content")
+        mockMvc.perform(get(TEST_FILE_URL)
                 .header(HttpHeaders.RANGE, "bytes=1024-2047"))
                 .andExpect(status().isRequestedRangeNotSatisfiable());
     }
 
     @Test
     public void testGetFileContentRanged_InvalidRequestType() throws Exception {
-        String fileId = "123";
-        setupFileMetadata(fileId);
+        setupFileMetadata();
         Resource resource = new ByteArrayResource("test content".getBytes());
-        when(fileService.getFileContent(fileId)).thenReturn(resource);
-        when(fileService.supportFileContentRequestType(fileId, FileContentRequestTypeDto.RANGE)).thenReturn(false);
+        when(fileService.getFileContent(TEST_FILENAME)).thenReturn(resource);
+        when(fileService.supportFileContentRequestType(TEST_FILENAME, FileContentRequestTypeDto.RANGE))
+                .thenReturn(false);
 
-        mockMvc.perform(get("/files/123/content")
+        mockMvc.perform(get(TEST_FILE_URL)
                 .header(HttpHeaders.RANGE, "bytes=1024-2047"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value(ExceptionEnum.INVALID_FILE_REQUEST_TYPE.getCode()));

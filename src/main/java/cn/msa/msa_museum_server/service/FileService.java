@@ -6,9 +6,9 @@ import cn.msa.msa_museum_server.dto.FileContentRequestTypeDto;
 import cn.msa.msa_museum_server.dto.FileMetadataDto;
 
 public interface FileService {
-    FileMetadataDto getFileMetadata(String id);
+    FileMetadataDto getFileMetadata(String filename);
 
-    Resource getFileContent(String id);
+    Resource getFileContent(String filename);
 
-    boolean supportFileContentRequestType(String id, FileContentRequestTypeDto requestType);
+    boolean supportFileContentRequestType(String filename, FileContentRequestTypeDto requestType);
 }

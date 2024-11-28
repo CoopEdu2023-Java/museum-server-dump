@@ -6,6 +6,7 @@ import java.nio.file.Path;
 
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.stereotype.Service;
 
 import cn.msa.msa_museum_server.config.FileProperties;
 import cn.msa.msa_museum_server.dto.FileContentRequestTypeDto;
@@ -18,6 +19,7 @@ import cn.msa.msa_museum_server.service.FileService;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
+@Service
 public class FileServiceImpl implements FileService {
 
     private final FileProperties fileProperties;
@@ -30,8 +32,8 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public FileMetadataDto getFileMetadata(String id) {
-        FileEntity fileEntity = fileRepository.findById(id)
+    public FileMetadataDto getFileMetadata(String filename) {
+        FileEntity fileEntity = fileRepository.findByFilename(filename)
                 .orElseThrow(() -> new BusinessException(ExceptionEnum.FILE_NOT_FOUND));
 
         Path filePath = getFilePath(fileEntity);
@@ -43,16 +45,15 @@ public class FileServiceImpl implements FileService {
         long size = fileEntity.getSize();
 
         return new FileMetadataDto(
-                id,
                 fileEntity.getFilename(),
                 fileEntity.getContentType(),
-                formatFileSize(size),
-                "/files/" + id + "/content");
+                size,
+                "/files/" + fileEntity.getFilename() + "/content");
     }
 
     @Override
-    public Resource getFileContent(String id) {
-        FileEntity fileEntity = fileRepository.findById(id)
+    public Resource getFileContent(String filename) {
+        FileEntity fileEntity = fileRepository.findByFilename(filename)
                 .orElseThrow(() -> new BusinessException(ExceptionEnum.FILE_NOT_FOUND));
 
         Path filePath = getFilePath(fileEntity);
@@ -72,8 +73,8 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public boolean supportFileContentRequestType(String id, FileContentRequestTypeDto requestType) {
-        FileEntity fileEntity = fileRepository.findById(id)
+    public boolean supportFileContentRequestType(String filename, FileContentRequestTypeDto requestType) {
+        FileEntity fileEntity = fileRepository.findByFilename(filename)
                 .orElseThrow(() -> new BusinessException(ExceptionEnum.FILE_NOT_FOUND));
 
         switch (fileEntity.getContentType()) {
@@ -97,15 +98,6 @@ public class FileServiceImpl implements FileService {
 
     private Path getFilePath(FileEntity fileEntity) {
         return Path.of(fileProperties.getStorageLocation()).resolve(fileEntity.getFilename());
-    }
-
-    private String formatFileSize(long size) {
-        if (size < 1024) {
-            return size + " B";
-        }
-        int exp = (int) (Math.log(size) / Math.log(1024));
-        String prefix = "KMGTPE".charAt(exp - 1) + "";
-        return String.format("%.1f %sB", size / Math.pow(1024, exp), prefix);
     }
 
 }

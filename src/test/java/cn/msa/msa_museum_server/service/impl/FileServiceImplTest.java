@@ -46,7 +46,7 @@ public class FileServiceImplTest {
 
     private FileEntity createFileEntity() {
         FileEntity fileEntity = new FileEntity();
-        fileEntity.setId("test-file-id");
+        fileEntity.setId(123L);
         fileEntity.setFilename("test-file.txt");
         fileEntity.setContentType("text/plain");
         fileEntity.setSize(12);
@@ -64,26 +64,25 @@ public class FileServiceImplTest {
     public void testGetFileMetadata_Success() throws IOException {
         FileEntity fileEntity = createFileEntity();
         createTestFile(fileEntity, "test content");
-        String fileId = fileEntity.getId();
+        String filename = fileEntity.getFilename();
 
-        when(fileRepository.findById(fileId)).thenReturn(Optional.of(fileEntity));
+        when(fileRepository.findByFilename(filename)).thenReturn(Optional.of(fileEntity));
 
-        FileMetadataDto fileMetadataDto = fileService.getFileMetadata(fileId);
+        FileMetadataDto fileMetadataDto = fileService.getFileMetadata(filename);
 
-        assertEquals(fileId, fileMetadataDto.getId());
         assertEquals(fileEntity.getFilename(), fileMetadataDto.getName());
         assertEquals(fileEntity.getContentType(), fileMetadataDto.getType());
-        assertEquals(fileEntity.getSize() + " B", fileMetadataDto.getSize());
-        assertEquals("/files/" + fileId + "/content", fileMetadataDto.getUrl());
+        assertEquals(fileEntity.getSize(), fileMetadataDto.getSize());
+        assertEquals("/files/" + filename + "/content", fileMetadataDto.getUrl());
     }
 
     @Test
     public void testGetFileMetadata_FileNotFound() {
-        String fileId = "test-file-id";
-        when(fileRepository.findById(fileId)).thenReturn(Optional.empty());
+        String filename = "test.pdf";
+        when(fileRepository.findByFilename(filename)).thenReturn(Optional.empty());
 
         BusinessException exception = assertThrows(BusinessException.class, () -> {
-            fileService.getFileMetadata(fileId);
+            fileService.getFileMetadata(filename);
         });
 
         assertEquals(ExceptionEnum.FILE_NOT_FOUND.getCode(), exception.getCode());
@@ -92,13 +91,13 @@ public class FileServiceImplTest {
     @Test
     public void testGetFileContent_Success() throws IOException {
         FileEntity fileEntity = createFileEntity();
-        String fileId = fileEntity.getId();
+        String filename = fileEntity.getFilename();
 
         Path filePath = createTestFile(fileEntity, "test content");
 
-        when(fileRepository.findById(fileId)).thenReturn(Optional.of(fileEntity));
+        when(fileRepository.findByFilename(filename)).thenReturn(Optional.of(fileEntity));
 
-        Resource resource = fileService.getFileContent(fileId);
+        Resource resource = fileService.getFileContent(filename);
 
         assertInstanceOf(UrlResource.class, resource);
         assertEquals(filePath.toUri(), resource.getURI());
@@ -106,11 +105,11 @@ public class FileServiceImplTest {
 
     @Test
     public void testGetFileContent_FileNotFound() {
-        String fileId = "test-file-id";
-        when(fileRepository.findById(fileId)).thenReturn(Optional.empty());
+        String filename = "test.pdf";
+        when(fileRepository.findByFilename(filename)).thenReturn(Optional.empty());
 
         BusinessException exception = assertThrows(BusinessException.class, () -> {
-            fileService.getFileContent(fileId);
+            fileService.getFileContent(filename);
         });
 
         assertEquals(ExceptionEnum.FILE_NOT_FOUND.getCode(), exception.getCode());
