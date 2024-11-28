@@ -18,7 +18,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+// import java.util.UUID;
 
 @Service
 public class FileUploadServiceImpl implements FileUploadService {
@@ -40,48 +40,51 @@ public class FileUploadServiceImpl implements FileUploadService {
 
         // 遍历文件列表并处理每个文件
         for (MultipartFile file : files) {
-            try {
-                // 验证文件名是否为空
-                String originalFilename = file.getOriginalFilename();
-                if (originalFilename == null || originalFilename.isBlank()) {
-                    failedFiles.add("File with no name cannot be uploaded");
-                    continue;
-                }
-
-                // 验证文件大小
-                if (file.getSize() > fileProperties.getMaxUploadSize()) {
-                    failedFiles.add(originalFilename + " (exceeds max upload size)");
-                    continue;
-                }
-
-                // 保存文件到磁盘
-                String filePath = fileProperties.getStorageLocation() + File.separator + originalFilename;
-                File destination = new File(filePath);
-                ensureDirectoryExists(destination.getParentFile());
-                file.transferTo(destination);
-
-                // 保存文件元数据到数据库
-                FileEntity uploadedFile = new FileEntity();
-                uploadedFile.setFilename(originalFilename); // 设置文件名
-                uploadedFile.setContentType(Files.probeContentType(destination.toPath())); // 设置文件类型
-                uploadedFile.setSize(file.getSize()); // 设置文件大小
-
-                // 打印调试信息
-                // System.out.println("File uploaded with ID: " + uploadedFile.getId());
-                System.out.println("Filename: " + uploadedFile.getFilename());
-                System.out.println("File size: " + uploadedFile.getSize());
-                System.out.println("Content type: " + uploadedFile.getContentType());
-
-                // 保存文件信息到数据库
-                fileRepository.save(uploadedFile);
-
-                // 添加到成功列表
-                uploadedFiles.add(originalFilename);
-            } catch (IOException e) {
-                failedFiles.add(file.getOriginalFilename() + " (Error: " + e.getMessage() + ")");
-            } catch (Exception e) {
-                failedFiles.add(file.getOriginalFilename() + " (Unexpected Error: " + e.getMessage() + ")");
+            // 验证文件名是否为空
+            String originalFilename = file.getOriginalFilename();
+            if (originalFilename == null || originalFilename.isBlank()) {
+                failedFiles.add("File with no name cannot be uploaded");
+                continue;
             }
+
+            // 验证文件大小
+            if (file.getSize() > fileProperties.getMaxUploadSize()) {
+                failedFiles.add(originalFilename + " (exceeds max upload size)");
+                continue;
+            }
+
+            // 保存文件到磁盘
+            String filePath = fileProperties.getStorageLocation() + File.separator + originalFilename;
+            File destination = new File(filePath);
+            ensureDirectoryExists(destination.getParentFile());
+            try {
+                file.transferTo(destination);
+            } catch (IOException e) {
+                failedFiles.add(originalFilename + " (Error: " + e.getMessage() + ")");
+                continue;
+            }
+
+            // 保存文件元数据到数据库
+            FileEntity uploadedFile = new FileEntity();
+            uploadedFile.setFilename(originalFilename); // 设置文件名
+            try {
+                uploadedFile.setContentType(Files.probeContentType(destination.toPath()));
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } // 设置文件类型
+            uploadedFile.setSize(file.getSize()); // 设置文件大小
+
+            // 打印调试信息
+            System.out.println("Filename: " + uploadedFile.getFilename());
+            System.out.println("File size: " + uploadedFile.getSize());
+            System.out.println("Content type: " + uploadedFile.getContentType());
+
+            // 保存文件信息到数据库
+            fileRepository.save(uploadedFile);
+
+            // 添加到成功列表
+            uploadedFiles.add(originalFilename);
         }
 
         // 如果所有文件都上传失败，抛出自定义异常
