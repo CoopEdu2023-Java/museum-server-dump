@@ -20,6 +20,6 @@ public class ErrorHandler {
     @ResponseBody
     public ResponseDto<String> exceptionHandler(BusinessException e) {
         System.out.println("Exception: " + e);
-        return new ResponseDto<String>(e.getCode(), "Unknown Error: " + e.getMessage(), null);
+        return new ResponseDto<String>(e.getCode(), "Error: " + e.getMessage(), null);
     }
 }
