@@ -1,11 +1,10 @@
 package cn.msa.msa_museum_server.entity;
 
-import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "user_entity")
+@Table(name = "users")
 @Data
 @NoArgsConstructor
 public class UserEntity {
@@ -22,6 +21,6 @@ public class UserEntity {
     public UserEntity(String username, String password) {
         this.username = username;
         this.password = password;
-    }
-}
 
+	}
+}

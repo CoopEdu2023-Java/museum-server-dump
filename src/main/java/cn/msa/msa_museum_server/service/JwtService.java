@@ -1,20 +1,22 @@
 package cn.msa.msa_museum_server.service;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
+
+import javax.crypto.SecretKey;
+
+import org.springframework.stereotype.Service;
 
 import cn.msa.msa_museum_server.entity.UserEntity;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.stereotype.Service;
-
-import javax.crypto.SecretKey;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
 
 @Service
 public class JwtService {
 
-    private String SECRET_KEY = "this_is_a_very_secure_example_key_12345";
+    private String SECRET_KEY = "https://www.youtube.com/watch?v=vw5AOn6FDzw&list=PLxRSX8UqzWccPUnMBBYdxe2v55eOgQxuj&index=12";
+
     private SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
     public String setToken(UserEntity userEntity) {
