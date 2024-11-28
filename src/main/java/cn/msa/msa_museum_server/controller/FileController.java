@@ -10,7 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
@@ -24,7 +27,7 @@ public class FileController {
         this.fileService = fileService;
     }
 
-    @GetMapping("/getFileList")
+    @GetMapping("/list")
     public ResponseDto<Page<FileEntity>> getFileList(
             @RequestParam(defaultValue = "0") String page,
             @RequestParam(defaultValue = "10") String size) {

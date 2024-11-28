@@ -44,7 +44,7 @@ class FileControllerTest {
 
         when(fileService.getFileList(any(Pageable.class))).thenReturn(mockPage);
 
-        mockMvc.perform(get("/files/getFileList")
+        mockMvc.perform(get("/files/list")
                         .param("page", "0")
                         .param("size", "5"))
                 .andExpect(status().isOk())
@@ -54,7 +54,7 @@ class FileControllerTest {
 
     @Test
     void testGetFileList_InvalidNumberFormat() throws Exception {
-        mockMvc.perform(get("/files/getFileList")
+        mockMvc.perform(get("/files/list")
                         .param("page", "abc") // 无效的 page 参数
                         .param("size", "10")
                         .accept(MediaType.APPLICATION_JSON))
@@ -63,7 +63,7 @@ class FileControllerTest {
 
     @Test
     void testGetFileList_InvalidPaginationParameters() throws Exception {
-        mockMvc.perform(get("/files/getFileList")
+        mockMvc.perform(get("/files/list")
                         .param("page", "-1") // Invalid pagination parameters
                         .param("size", "0")
                         .accept(MediaType.APPLICATION_JSON))
