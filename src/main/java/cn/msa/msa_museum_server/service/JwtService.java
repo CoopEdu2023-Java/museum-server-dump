@@ -16,6 +16,7 @@ import io.jsonwebtoken.security.Keys;
 public class JwtService {
 
     private String SECRET_KEY = "https://www.youtube.com/watch?v=vw5AOn6FDzw&list=PLxRSX8UqzWccPUnMBBYdxe2v55eOgQxuj&index=12";
+
     private SecretKey key = Keys.hmacShaKeyFor(SECRET_KEY.getBytes(StandardCharsets.UTF_8));
 
     public String setToken(UserEntity userEntity) {
