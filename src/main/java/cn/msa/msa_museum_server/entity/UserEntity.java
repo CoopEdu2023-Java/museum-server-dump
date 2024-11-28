@@ -16,17 +16,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@Column(unique = true)
-	private String username;
+    @Column(unique = true)
+    private String username;
 
-	private String password;
+    private String password;
 
-	public UserEntity(String username, String password) {
-		this.username = username;
-		this.password = password;
+    public UserEntity(String username, String password) {
+        this.username = username;
+        this.password = password;
 	}
 }
