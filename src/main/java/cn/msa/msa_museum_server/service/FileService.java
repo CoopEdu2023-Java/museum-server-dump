@@ -1,4 +1,4 @@
-package cn.msa.museum_server.service;
+package cn.msa.msa_museum_server.service;
 
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -8,10 +8,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import cn.msa.museum_server.entity.FileEntity;
-import cn.msa.museum_server.exception.BusinessException;
-import cn.msa.museum_server.exception.ExceptionEnum;
-import cn.msa.museum_server.repository.FileRepository;
+import cn.msa.msa_museum_server.entity.FileEntity;
+import cn.msa.msa_museum_server.exception.BusinessException;
+import cn.msa.msa_museum_server.exception.ExceptionEnum;
+import cn.msa.msa_museum_server.repository.FileRepository;
 
 @Service
 public class FileService {
@@ -36,7 +36,7 @@ public class FileService {
 
             FileEntity fileEntity = new FileEntity();
             fileRepository.save(fileEntity);
-            String id = fileEntity.getId();
+            Long id = fileEntity.getId();
 
             fileEntity = new FileEntity(id, fileName, filePath.toString(), size);
 

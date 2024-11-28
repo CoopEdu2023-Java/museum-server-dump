@@ -1,4 +1,4 @@
-package cn.msa.museum_server.dto;
+package cn.msa.msa_museum_server.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

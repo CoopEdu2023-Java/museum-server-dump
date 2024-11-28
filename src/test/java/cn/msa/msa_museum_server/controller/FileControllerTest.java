@@ -1,4 +1,4 @@
-package cn.msa.museum_server.controller;
+package cn.msa.msa_museum_server.controller;
 
 import org.junit.jupiter.api.Test;
 import static org.mockito.Mockito.when;
@@ -15,8 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import cn.msa.museum_server.entity.FileEntity;
-import cn.msa.museum_server.service.FileService;
+import cn.msa.msa_museum_server.entity.FileEntity;
+import cn.msa.msa_museum_server.service.FileService;
 
 @SpringBootTest
 @AutoConfigureMockMvc

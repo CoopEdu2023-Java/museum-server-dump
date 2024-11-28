@@ -1,4 +1,4 @@
-package cn.msa.museum_server.entity;
+package cn.msa.msa_museum_server.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +15,7 @@ public class FileEntity {
 
     @Id
     @GeneratedValue
-    private String id;
+    private Long id;
 
     // e.g., "test.pdf"
     private String filename;
