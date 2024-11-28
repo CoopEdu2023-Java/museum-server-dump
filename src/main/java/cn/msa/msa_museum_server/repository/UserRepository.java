@@ -9,11 +9,5 @@ import java.util.Optional;
 
 public interface UserRepository extends CrudRepository<UserEntity, Integer> {
 
-    public boolean existsByUsernameAndPassword(String username, String password);
-
-    public Optional<UserEntity> findByUsernameAndPassword(String username, String password);
-
-    public boolean existsByUsername(String username);
-
     public Optional<UserEntity> findByUsername(String username);
 }

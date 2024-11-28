@@ -1,6 +1,5 @@
 package cn.msa.msa_museum_server.controller;
 
-import cn.msa.msa_museum_server.dto.LoginDto;
 import cn.msa.msa_museum_server.dto.ResetPasswordDto;
 import cn.msa.msa_museum_server.dto.ResponseDto;
 import cn.msa.msa_museum_server.exception.BusinessException;
@@ -18,15 +17,7 @@ public class UserController {
     @Autowired
     private UserService userService; // 修改变量名，语义更清晰
 
-    @PostMapping("/login")
-    public String login(@RequestBody LoginDto loginDto) {
-        if (loginDto.getUsername() == null || loginDto.getPassword() == null) {
-            throw new BusinessException(ExceptionEnum.MISSING_PARAMETERS);
-        }
-        return userService.login(loginDto); // 使用实例调用非静态方法
-    }
-
-    @PostMapping("/reset-password")
+    @PostMapping("/password/reset")
     public ResponseDto<Void> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
         if (resetPasswordDto.getUsername() == null || resetPasswordDto.getPassword() == null || resetPasswordDto.getNewPassword() == null) {
             throw new BusinessException(ExceptionEnum.MISSING_PARAMETERS);

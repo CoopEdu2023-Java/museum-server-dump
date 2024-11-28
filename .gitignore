@@ -24,3 +24,5 @@ hs_err_pid*
 replay_pid*
 
 /target
+/src/main/java/cn/msa/msa_museum_server/config
+/src/main/java/cn/msa/msa_museum_server/service/JwtService.java
