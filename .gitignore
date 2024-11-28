@@ -1,6 +1,5 @@
 # Compiled class file
 *.class
-.target/
 
 # Log file
 *.log
@@ -25,10 +24,6 @@ hs_err_pid*
 replay_pid*
 
 /target
-
-# setting of IDE
-.idea/
-.vscode/
 
 # mvnw
 mvnw.cmd
