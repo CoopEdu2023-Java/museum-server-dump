@@ -10,13 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @Slf4j
+@RequestMapping("/files")
 public class FileController {
 
     private final FileService fileService;
@@ -26,7 +24,7 @@ public class FileController {
         this.fileService = fileService;
     }
 
-    @GetMapping("/files")
+    @GetMapping("/getFileList")
     public ResponseDto<Page<FileEntity>> getFileList(
             @RequestParam(defaultValue = "0") String page,
             @RequestParam(defaultValue = "10") String size) {
@@ -46,14 +44,5 @@ public class FileController {
             log.warn("Pagination parameters are not numbers: page={}, size={}", page, size);
             throw new BusinessException(ExceptionEnum.INVALID_ENTRY_TYPE);
         }
-    }
-
-    @PostMapping("/log")
-    public void log() {
-        log.trace("TRACE");
-        log.debug("DEBUG");
-        log.info("INFO");
-        log.warn("WARN");
-        log.error("ERROR");
     }
 }
