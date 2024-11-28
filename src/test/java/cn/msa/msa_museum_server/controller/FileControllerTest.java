@@ -33,7 +33,7 @@ public class FileControllerTest {
     @Test
     void testFileUploadSuccess() throws Exception {
         MultipartFile file = new MockMultipartFile("file", "test.txt", "text/plain", "hello world".getBytes());
-        String id = "1";
+        Long id = (long) 1;
         FileEntity mockfileEntity = new FileEntity(id, "test.txt", "text/plain", 1024);
         when(fileService.upload(file)).thenReturn(mockfileEntity);
 
