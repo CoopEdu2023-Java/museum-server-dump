@@ -9,22 +9,33 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class FileEntity {
-
+    
+    // 使用 UUID 类型作为主键
     @Id
-    @GeneratedValue
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int id; // 使用 UUID 作为主键
 
-    // e.g., "test.pdf"
-    private String filename;
+    @Column(nullable = false, length = 255) // 确保 filename 不为空，且长度为 255
+    private String filename; // 文件名
 
-    // e.g., "application/pdf"
-    // 用nio里的 Files.probeContentType(Path) 生成
-    private String contentType;
+    @Column(length = 100) // content_type 的最大长度为 100
+    private String contentType; // 文件的 MIME 类型
 
-    // 文件字节数
-    private long size;
+    @Column(nullable = false) // 确保 size 不为空
+    private long size; // 文件大小（以字节为单位）
 
+    // 默认构造函数
+    // public FileEntity() {
+    //     // 使用 UUID 随机生成 ID
+    //     this.id = UUID.randomUUID();
+    // }
+    
+    // 根据实际需求可以加入其他方法，如：
+    public FileEntity(String filename, String contentType, long size) {
+        this.filename = filename;
+        this.contentType = contentType;
+        this.size = size;
+    }
 }
