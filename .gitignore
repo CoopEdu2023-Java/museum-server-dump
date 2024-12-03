@@ -24,5 +24,10 @@ hs_err_pid*
 replay_pid*
 
 /target
+
+# mvnw
+mvnw.cmd
+mvnw
+
+/.idea
 /.vscode
-src/main/java/cn/msa/msa_museum_server/exception/BusinessException.java

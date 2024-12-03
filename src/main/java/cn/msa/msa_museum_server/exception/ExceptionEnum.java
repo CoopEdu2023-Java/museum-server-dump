@@ -1,27 +1,22 @@
 package cn.msa.msa_museum_server.exception;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
 public enum ExceptionEnum {
-    INVALID_PARAMETER(400, "Invalid parameter"),
-    FILE_NOT_FOUND(404, "File not found"),
-    INTERNAL_SERVER_ERROR(500, "Internal server error"),
-    FILE_UPLOAD_ERROR(500, "Failed to upload file"),
-    DIRECTORY_CREATION_FAILED(500, "Failed to create directory"),
-    DATABASE_SAVE_ERROR(500, "Failed to save file information to the database");
 
-    private final int code;
+    MISSING_PARAMETERS(1001, "Missing Parameters"),
+    USER_EXISTS(2001, "User exists"),
+    USER_DOES_NOT_EXIST(2002, "User does not exist"),
+    WRONG_PASSWORD(2003, "Wrong password"),
+    NEW_PASSWORD_SAME_AS_OLD(2004, "Your new password is the same as the old one. Change a different password."),
+    NEW_PASSWORD_UNDER_REQUIREMENTS(2005,
+            "Your new password must have a length of 8 and has at least one of the following: Uppercase Letters [A-Z], lowercase Letters [a-z], numbers [0-9], and symbols[!@~]."),
+    EMPTY_FILE(3001, "Empty file"),
+    UPLOAD_FILE_ERROR(3002, "Upload file error");
+
+    private final Integer code;
     private final String message;
-
-    ExceptionEnum(int code, String message) {
-        this.code = code;
-        this.message = message;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
-    }
 }
-

@@ -1,8 +1,10 @@
 package cn.msa.msa_museum_server.entity;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
-// import java.util.UUID;
 import lombok.NoArgsConstructor;
 
 @Entity
