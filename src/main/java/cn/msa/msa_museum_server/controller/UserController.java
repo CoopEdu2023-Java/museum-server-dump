@@ -18,7 +18,7 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
+    // Path
     @PostMapping("/register")
     public ResponseDto<Void> register(@RequestBody RegisterDto registerDto) {
         if (registerDto.getUsername() == null || registerDto.getPassword() == null) {

@@ -14,9 +14,8 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
-
     private static final BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
-
+    // Register API
     public void register(RegisterDto registerDto) {
         String username = registerDto.getUsername();
         String password = bCryptPasswordEncoder.encode(registerDto.getPassword());
