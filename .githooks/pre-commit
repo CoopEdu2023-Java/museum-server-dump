@@ -4,7 +4,7 @@ echo "Checking code formatting with Spotless..."
 mvn spotless:check
 
 if [ $? -ne 0 ]; then
+  echo "Spotless found shit. Fixing."
   mvn spotless:apply
-  echo "Shit happened"
   exit 1
 fi
