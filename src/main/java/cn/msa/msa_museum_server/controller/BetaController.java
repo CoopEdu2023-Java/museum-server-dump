@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 public class BetaController {
   @GetMapping("/hello")
   public ResponseEntity<String> sayHello() {
-    return ResponseEntity.ok("Hello, World!");
+    return ResponseEntity.ok("Hello, Brian!");
   }
 
   @PostMapping("/echo")
