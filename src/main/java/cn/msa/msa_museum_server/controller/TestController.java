@@ -13,16 +13,16 @@ public class TestController {
     return ResponseEntity.ok("Hello, World!");
   }
 
-  @GetMapping("/greet/{name}")
-  public ResponseEntity<String> greetUser(@PathVariable String name) {
-    return ResponseEntity.ok("Hello, " + name + "!");
-  }
-
   @PostMapping("/echo")
   public ResponseEntity<Map<String, String>> echoMessage(@RequestBody Map<String, String> payload) {
     Map<String, String> response = new HashMap<>();
     response.put("message", payload.getOrDefault("message", "No message received"));
     return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/greet/{name}")
+  public ResponseEntity<String> greetUser(@PathVariable String name) {
+    return ResponseEntity.ok("Hello, " + name + "!");
   }
 
   @PutMapping("/update")
