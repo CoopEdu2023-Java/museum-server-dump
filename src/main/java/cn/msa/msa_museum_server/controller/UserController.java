@@ -30,7 +30,9 @@ public class UserController {
 
   @PostMapping("/password/reset")
   public ResponseDto<Void> resetPassword(@RequestBody ResetPasswordDto resetPasswordDto) {
-    if (resetPasswordDto.getUsername() == null|| resetPasswordDto.getPassword() == null|| resetPasswordDto.getNewPassword() == null) {
+    if (resetPasswordDto.getUsername() == null
+        || resetPasswordDto.getPassword() == null
+        || resetPasswordDto.getNewPassword() == null) {
       throw new BusinessException(ExceptionEnum.MISSING_PARAMETERS);
     }
     userService.resetPassword(resetPasswordDto);
