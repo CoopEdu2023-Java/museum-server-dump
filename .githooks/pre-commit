@@ -13,5 +13,12 @@ fi
 echo "Re-staging modified files..."
 git add -u
 
-echo "Spotless formatting successful."
+# Check if there are still staged changes
+if ! git diff --cached --exit-code > NUL 2>&1; then
+  echo "Files were formatted and re-staged."
+  echo "Proceeding with the commit..."
+else
+  echo "No formatting changes detected."
+fi
+
 exit 0
