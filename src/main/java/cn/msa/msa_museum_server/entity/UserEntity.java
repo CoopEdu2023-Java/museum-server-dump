@@ -1,8 +1,8 @@
 package cn.msa.msa_museum_server.entity;
 
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
