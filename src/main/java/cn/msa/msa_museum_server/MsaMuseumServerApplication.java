@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @SpringBootApplication
 public class MsaMuseumServerApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MsaMuseumServerApplication.class, args);
-	}
-
+  public static void main(String[] args) {
+    SpringApplication.run(MsaMuseumServerApplication.class, args);
+  }
 }
