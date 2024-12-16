@@ -1,0 +1,11 @@
+#!/bin/sh
+
+echo "Running Spotless..."
+mvn spotless:apply
+
+if [ $? -ne 0 ]; then
+  echo "Spotless formatting failed. Please fix the issues and try again."
+  exit 1
+fi
+
+exit 0
