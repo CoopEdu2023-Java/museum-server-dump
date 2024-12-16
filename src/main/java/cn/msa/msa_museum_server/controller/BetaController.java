@@ -8,16 +8,17 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/test")
 public class BetaController {
-  @GetMapping("/hello")
-  public ResponseEntity<String> sayHello() {
-    return ResponseEntity.ok("Hello, Brian!");
-  }
 
   @PostMapping("/echo")
   public ResponseEntity<Map<String, String>> echoMessage(@RequestBody Map<String, String> payload) {
     Map<String, String> response = new HashMap<>();
     response.put("message", payload.getOrDefault("message", "No message received"));
     return ResponseEntity.ok(response);
+  }
+
+  @GetMapping("/hello")
+  public ResponseEntity<String> sayHello() {
+    return ResponseEntity.ok("Hello, Brian!");
   }
 
   @GetMapping("/greet/{name}")

@@ -8,11 +8,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/test")
 public class TestController {
-  @GetMapping("/hello")
-  public ResponseEntity<String> sayHello() {
-    return ResponseEntity.ok("Hello, World!");
-  }
-
   @PostMapping("/echo")
   public ResponseEntity<Map<String, String>> echoMessage(@RequestBody Map<String, String> payload) {
     Map<String, String> response = new HashMap<>();
@@ -33,5 +28,10 @@ public class TestController {
   @DeleteMapping("/delete/{id}")
   public ResponseEntity<String> deleteItem(@PathVariable String id) {
     return ResponseEntity.ok("Item with ID " + id + " has been deleted.");
+  }
+
+  @GetMapping("/hello")
+  public ResponseEntity<String> sayHello() {
+    return ResponseEntity.ok("Hello, World!");
   }
 }
