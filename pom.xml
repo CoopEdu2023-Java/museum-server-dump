@@ -127,7 +127,6 @@
                         <ratchetFrom>origin/main</ratchetFrom>
                     </java>
                 </configuration>
-
             </plugin>
         </plugins>
     </build>
