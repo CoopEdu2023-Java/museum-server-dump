@@ -1,10 +1,17 @@
 #!/bin/sh
 
-echo "Checking code formatting with Spotless..."
-mvn spotless:check
+echo "Running Spotless..."
+mvn spotless:apply
 
+# Check if Spotless succeeded
 if [ $? -ne 0 ]; then
-  echo "Spotless found shit. Fixing."
-  mvn spotless:apply
+  echo "Spotless formatting failed. Please fix the issues and try again."
   exit 1
 fi
+
+# Re-stage all modified files
+echo "Re-staging modified files..."
+git add -u
+
+echo "Spotless formatting successful."
+exit 0
