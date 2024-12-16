@@ -1,11 +1,18 @@
 #!/bin/sh
 
-echo "Running Spotless..."
-mvn spotless:apply
+# Step 1: Run spotless:check to see if code is clean
+echo "Checking code formatting with Spotless..."
+mvn spotless:check
 
+# If spotless:check fails (code is not clean), abort commit
 if [ $? -ne 0 ]; then
-  echo "Spotless formatting failed. Please fix the issues and try again."
+  echo "Code is not clean. Aborting commit."
   exit 1
 fi
 
+# Step 2: Run spotless:apply to fix the code if it's not clean
+echo "Running Spotless to apply formatting..."
+mvn spotless:apply
+
+# Step 3: Allow commit to proceed
 exit 0
