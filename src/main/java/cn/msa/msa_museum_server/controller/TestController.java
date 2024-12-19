@@ -15,14 +15,14 @@ public class TestController {
     return ResponseEntity.ok(response);
   }
 
-  @GetMapping("/greet/{name}")
-  public ResponseEntity<String> greetUser(@PathVariable String name) {
-    return ResponseEntity.ok("Hello, " + name + "!");
-  }
-
   @PutMapping("/update")
   public ResponseEntity<String> updateData(@RequestParam String data) {
     return ResponseEntity.ok("Data updated to: " + data);
+  }
+
+  @GetMapping("/greet/{name}")
+  public ResponseEntity<String> greetUser(@PathVariable String name) {
+    return ResponseEntity.ok("Hello, " + name + "!");
   }
 
   @DeleteMapping("/delete/{id}")

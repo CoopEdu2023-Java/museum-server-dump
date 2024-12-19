@@ -22,7 +22,7 @@ echo "Re-staging formatted files..."
 echo "$STAGED_FILES" | xargs git add
 
 # Verify if files were changed and staged
-if ! git diff --cached --exit-code > NUL 2>&1; then
+if ! git diff --cached --exit-code > /dev/null 2>&1; then
   echo "Some files were formatted and re-staged."
   echo "Please proceed with the commit."
 else
